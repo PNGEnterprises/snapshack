@@ -1,0 +1,27 @@
+{
+  "name": "snapcat",
+  "version": "0.0.0",
+  "description": "Snapcat - Public snaps",
+  "main": "server.js",
+  "dependencies": {
+    "snapchat": "~0.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/process/snapcat.git"
+  },
+  "keywords": [
+    "Snapchat",
+    "crap",
+    "snap"
+  ],
+  "author": "Justin Chines, Tim Calvert, Nolan Manor, John Crespi",
+  "license": "All rights reserved",
+  "readmeFilename": "README.md",
+  "gitHead": "cd495d9fd8a3ebba14a3061188674e61e9076937"
+}
