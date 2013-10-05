@@ -26,7 +26,7 @@ client.on('error', function (data) {
 	console.log(data);
 });
 
-client.login('thesnapshack', fs.readFileSync('sc_pass').toString());
+client.login('thesnapshack', fs.readFileSync('sc_pass').toString().split('\n')[0]);
 
 client.on('sync', function (data) {
 	//console.log(data);
