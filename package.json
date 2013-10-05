@@ -4,7 +4,8 @@
   "description": "Snapcat - Public snaps",
   "main": "server.js",
   "dependencies": {
-    "snapchat": "~0.0.1"
+    "snapchat": "~0.0.1",
+    "connect": "~2.9.0"
   },
   "devDependencies": {},
   "scripts": {
