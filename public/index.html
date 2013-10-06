@@ -5,8 +5,10 @@
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
     <script src='/socket.io/socket.io.js'></script>
     <script type="text/javascript"> 
+      var noimage = false;
       var socket = io.connect('http://snapshack.nodejitsu.com/');
       socket.on('IMAGE', function (data) {
+        noimage = false;
         $('#snap').fadeOut(75);
       	$('#snap').attr('src', 'data:image/jpeg;base64,' + data.img_data);
         $('#snap').fadeIn(75);
@@ -16,9 +18,12 @@
       	console.log("image message shit");
       });
       socket.on('NOIMAGE', function() {
-        $('#snap').fadeOut(75);
-      	$('#snap').attr('src', 'img/noimage.png');
-        $('#snap').fadeIn(75);
+        if (!noimage) {
+          $('#snap').fadeOut(75);
+        	$('#snap').attr('src', 'img/noimage.png');
+          $('#snap').fadeIn(75);
+        }
+        noimage = true;
       	console.log("fuck");
       });
     </script>
