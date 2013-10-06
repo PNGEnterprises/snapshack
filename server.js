@@ -35,10 +35,13 @@ client.on('sync', function (data) {
 		if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
 		  console.log('Snap received with id ' + snap.id);
       // XXX TODO Delete files after written
-      var out = fs.createWriteStream("/tmp/" + snap.id); // Create temp file with snap.id as filename
+      var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename      
 			out.on('finish', function () {
-        console.log("stream gettin piped");
-        //db.addSnap(snap.id, snap.sn, "derp"/*out*/, snap.t, snap.ts);
+				out.readable = true; // allow reading from stream later
+      	var img_str = fs.readFileSync('snap_' + snap.id);
+      	img_str = new Buffer(img_str).toString('base64');
+        db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
+      	fs.unlink('snap_' + snap.id, function () { /* don't care */ });
       });
       client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
 	  }
