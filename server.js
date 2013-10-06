@@ -32,42 +32,77 @@ client.on('sync', function (data) {
   }
 
   // Loop through snaps received
-  data.snaps.forEach(function (snap) {
-    if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
-      console.log('Snap received with id ' + snap.id);
-      // XXX TODO Delete files after written
-      try {
-      	var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename
-      } 
-      catch (err) {
-      	console.log("couldnt create file");
-      }     
-      out.on('finish', function () {
-        try {
-        		console.log('before read snap_' + snap.id);
-            var img_str = fs.readFileSync('snap_' + snap.id);
-            img_str = new Buffer(img_str).toString('base64');
-            console.log("img_str: " + img_str);
-            //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
-            fs.unlink('snap_' + snap.id, function () { /* don't care */ });
-            console.log("after delete");
-        }
-        catch (err) {
-          /* Ignore lol */
-          console.log(err);
-        }
-      });
-      try {
-        client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
-      }
-      catch (err) {
-        console.log("error getting blob for " + snap.id);
-      }
-    }
-  });
+  // data.snaps.forEach(function (snap) {
+  //   if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
+  //     console.log('Snap received with id ' + snap.id);
+  //     // XXX TODO Delete files after written
+  //     try {
+  //     	var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename
+  //     } 
+  //     catch (err) {
+  //     	console.log("couldnt create file");
+  //     }     
+  //     out.on('finish', function () {
+  //       try {
+  //       		console.log('before read snap_' + snap.id);
+  //           var img_str = fs.readFileSync('snap_' + snap.id);
+  //           img_str = new Buffer(img_str).toString('base64');
+  //           db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
+  //           fs.unlink('snap_' + snap.id, function () { /* don't care */ });
+  //           console.log("after delete");
+  //       }
+  //       catch (err) {
+  //         /* Ignore lol */
+  //         console.log(err);
+  //       }
+  //     });
+  //     try {
+  //       client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
+  //     }
+  //     catch (err) {
+  //       console.log("error getting blob for " + snap.id);
+  //     }
+  //   }
+  // });
+	var snap = data.snaps[0];
+	console.log(snap);
+	if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
+		var out = fs.createWriteStream('snap_' + snap.id);
+		out.on('finish', function () {
+			var img_str = fs.readFileSync('snap_' + snap.id);
+			img_str = new Buffer(img_str).toString('base64');
+
+			db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts, data.snaps, 0, addSnapCallback);
+		});
+		client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
+	}
 });
 
 setInterval(function() {
   client.sync();
 }, 3000000);
+
+function addSnapCallback(all_snaps, count) {
+	console.log("Fucking count: " + count);
+	if(count == all_snaps.length)
+		return;
+
+	var snap = all_snaps[count];
+	if(typeof snap.sn === 'undefined' || typeof snap.t === 'undefined') {
+		db.addSnap(-1, 0, "", 0, 0, all_snaps, count, addSnapCallback);
+		return;
+	}
+
+	console.log(snap);
+
+	var out = fs.createWriteStream('snap_' + snap.id);
+	out.on('finish', function () {
+		var img_str = fs.readFileSync('snap_' + snap.id);
+		img_str = fs.readFileSync('snap_' + snap.id);
+
+		db.addSnap(snap.id, snap.sn, img_str, snap.t,
+			snap.ts, all_snaps, count, addSnapCallback);
+	});
+	client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
+}
 
