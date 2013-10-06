@@ -8,6 +8,25 @@ var server = connect.createServer(
     connect.static('public')
 );
 
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse
+// DELETE THEse// DELETE THEse
+
+// DELETE THEse
+// DELETE THEse
 var snaps = []
 var max_ts = 0;
 
@@ -91,6 +110,7 @@ setInterval(function() {
 
 
 
+
 function LETSRUNTHISSHIT() {
   if (snaps.length == 0) {
     //SEND GAY SHIT MESSAGE
@@ -108,6 +128,8 @@ function LETSRUNTHISSHIT() {
 
 /// FUCKING WOW
 LETSRUNTHISSHIT();
+
+
 
 
 
