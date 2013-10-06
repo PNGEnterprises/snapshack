@@ -81,6 +81,8 @@ client.on('sync', function (data) {
               ts: snap.ts
             });
 
+            console.log("SNAP ADDED");
+
             if (snap.ts > max_ts)
               max_ts = snap.ts
 
