@@ -110,10 +110,12 @@ client.on('sync', function (data) {
       }, 5000);
     }
   });
+
+  setTimeout(client.sync, 30000);
 });
 
 
-setInterval(client.sync, 30000);
+client.sync();
 
 
 
