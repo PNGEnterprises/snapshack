@@ -1,6 +1,6 @@
 var connect = require('connect');
 var snapchat = require('snapchat');
-var io = require('socket.io');
+var sio = require('socket.io');
 var fs = require('fs');
 var db = require('./db');
 
@@ -31,9 +31,11 @@ var server = connect.createServer(
 var snaps = []
 var max_ts = 0;
 
+
 server.listen(port, function () {
     console.log("Listening on port " + port);
 });
+var io = sio.listen(server);
 
 // Snapchat client
 var client = new snapchat.Client();
@@ -117,13 +119,15 @@ function LETSRUNTHISSHIT() {
     //SEND GAY SHIT MESSAGE
     io.sockets.emit('NOIMAGE');
     setTimeout(LETSRUNTHISSHIT, 1000);
+
+    return;
   }
   var THESNAP = snaps[0];
   // SEND THE FUCKING SNAP
   io.sockets.emit('IMAGE', THESNAP);
   snaps.splice(1);
 
-  setTimeout(LETSRUNTHISSHIT, snap.time * 1000);
+  setTimeout(LETSRUNTHISSHIT, THESNAP.time * 1000);
 }
 
 
