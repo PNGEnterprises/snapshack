@@ -48,7 +48,7 @@ client.on('sync', function (data) {
       try {
       	client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
       }
-      catch {
+      catch (err) {
       	/* Ignore lol */
       }
     }
