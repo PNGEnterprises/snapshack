@@ -5,7 +5,7 @@
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
     <script src='/socket.io/socket.io.js'></script>
     <script type="text/javascript"> 
-      var socket = io.connect('http://snapshack.nodejitsu.com/'); // http://localhost:8080
+      var socket = io.connect('http://localhost:8080'); // http://snapshack.nodejitsu.com/
       socket.on('IMAGE', function (data) {
       	$('#snap').attr('src', 'data:image/jpeg;base64,' + data.img_data);
       	// username
@@ -19,12 +19,14 @@
       });
     </script>
   </head>
-  <body>
-    <div>
+  <body style="background-color: tan;">
+    <div style="width: 960px; margin-left:auto; margin-right: auto; background-color: white; overflow: hidden; padding: 20px; border-radius: 15px; min-height: 600px;">
       <div style="float:left;">
-      	<img id="snap">
+        <img src="img/logo.png" style="width: 60%;"><br />
+        <img id="snap" style="max-width: 460px;">
       </div>
-      <div id='messagesDiv' style="float:right;">
+      <div id='messagesDiv' style="float:right; max-width: 960px;">
+        <i>Made at HackMIT, October 2013</i><br />
         <input type='text' id='nameInput' placeholder='Name'>
         <input type='text' id='messageInput' placeholder='Message'>
         <script>
