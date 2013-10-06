@@ -16,40 +16,41 @@ var client = new snapchat.Client();
 
 // Log errors
 client.on('error', function (data) {
-	console.log('ERROR!!!!');
-	console.log(data);
+  console.log('ERROR!!!!');
+  console.log(data);
 });
 
 client.login('thesnapshack', process.env.SC_PASS);
 
 client.on('sync', function (data) {
-	// Issues?
-	if(typeof data.snaps === 'undefined') {
-		console.log('MORE ERRORS!!!!');
-		console.log(data);
-		return;
-	}
+  // Issues?
+  if(typeof data.snaps === 'undefined') {
+    console.log('MORE ERRORS!!!!');
+    console.log(data);
+    return;
+  }
 
-	// Loop through snaps received
-	data.snaps.forEach(function (snap) {
-		if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
-		  console.log('Snap received with id ' + snap.id);
+  // Loop through snaps received
+  for (var snap_ in data.snaps) {
+    var snap = data.snaps[snap_];
+    if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
+      console.log('Snap received with id ' + snap.id);
       // XXX TODO Delete files after written
       var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename      
-		out.on('finish', function () {
-				out.readable = true; // allow reading from stream later
-      	var img_str = fs.readFileSync('snap_' + snap.id);
-      	img_str = new Buffer(img_str).toString('base64');
+      out.on('finish', function () {
+        out.readable = true; // allow reading from stream later
+        var img_str = fs.readFileSync('snap_' + snap.id);
+        img_str = new Buffer(img_str).toString('base64');
         console.log("img_str: " + img_str);
         //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
-      	fs.unlink('snap_' + snap.id, function () { /* don't care */ });
+        fs.unlink('snap_' + snap.id, function () { /* don't care */ });
       });
       client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
-      }
-  });
+    }
+  };
 });
 
 setInterval(function() {
-	client.sync();
+  client.sync();
 }, 3000000);
 
