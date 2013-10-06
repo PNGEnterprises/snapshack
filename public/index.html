@@ -34,31 +34,33 @@
         <script>
           var myDataRef = new Firebase('https://fm65i1731k9.firebaseio-demo.com/');
           $('#messageInput').keypress(function (e) {
-          if (e.keyCode == 13) {
-            var name = $('#nameInput').val();
-            var text = $('#messageInput').val();
-            var timestamp = Firebase.ServerValue.TIMESTAMP
-            myDataRef.push({name: name, text: text, timestamp: timestamp});
-            $('#messageInput').val('');
-            myDataRef.once('value', function(dataSnapshot) {
-				      // store dataSnapshot for use in below examples.
-  					  myDataRefSnapshot = dataSnapshot;
-  				  });
-  				  var children = myDataRefSnapshot.numChildren();
-  				  if(children > 30)
-  				  {
-  					  myDataRef.remove();
-  				  }
+            if (e.keyCode == 13) {
+              var name = $('#nameInput').val();
+              var text = $('#messageInput').val();
+              var timestamp = Firebase.ServerValue.TIMESTAMP;
+              myDataRef.push({name: name, text: text, timestamp: timestamp});
+              $('#messageInput').val('');
+              myDataRef.once('value', function(dataSnapshot) {
+  				      // store dataSnapshot for use in below examples.
+    					  myDataRefSnapshot = dataSnapshot;
+    				  });
+    				  var children = myDataRefSnapshot.numChildren();
+    				  if(children > 30)
+    				  {
+    					  myDataRef.remove();
+    				  }
+            }
+            
+            myDataRef.on('child_added', function(snapshot) {
+              var message = snapshot.val();
+              displayChatMessage(message.name, message.text);
+            });
+
+            function displayChatMessage(name, text, timestamp) {
+              $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
+              $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+            };
           }
-          
-          myDataRef.on('child_added', function(snapshot) {
-          var message = snapshot.val();
-          displayChatMessage(message.name, message.text);
-          });
-          function displayChatMessage(name, text, timestamp) {
-          $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
-          $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
-          };
         </script>
       </div>
     </div>
