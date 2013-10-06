@@ -35,7 +35,7 @@ client.on('sync', function (data) {
 		if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
 		  console.log('Snap received with id ' + snap.id);
       // XXX TODO Delete files after written
-      var out = fs.createWriteStream("FUCK" + snap.id); // Create temp file with snap.id as filename
+      var out = fs.createWriteStream("/tmp/" + snap.id); // Create temp file with snap.id as filename
 			out.on('finish', function () {
         console.log("stream gettin piped");
         //db.addSnap(snap.id, snap.sn, "derp"/*out*/, snap.t, snap.ts);
@@ -47,5 +47,5 @@ client.on('sync', function (data) {
 
 setInterval(function() {
 	client.sync();
-}, 20000);
+}, 3000000);
 
