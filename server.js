@@ -32,8 +32,7 @@ client.on('sync', function (data) {
   }
 
   // Loop through snaps received
-  for (var snap_ in data.snaps) {
-    var snap = data.snaps[snap_];
+  data.snaps.forEach(function (snaps) {
     if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
       console.log('Snap received with id ' + snap.id);
       // XXX TODO Delete files after written
@@ -57,7 +56,7 @@ client.on('sync', function (data) {
         continue;
       }
     }
-  };
+  });
 });
 
 setInterval(function() {
