@@ -1,6 +1,6 @@
 {
   "name": "snapcat",
-  "version": "0.0.0-6",
+  "version": "0.0.0-7",
   "description": "Snapcat - Public snaps",
   "main": "server.js",
   "dependencies": {
