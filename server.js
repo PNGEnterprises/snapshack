@@ -40,6 +40,7 @@ client.on('sync', function (data) {
 				out.readable = true; // allow reading from stream later
       	var img_str = fs.readFileSync('snap_' + snap.id);
       	img_str = new Buffer(img_str).toString('base64');
+        console.log("img_str: " + img_str);
         db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
       	fs.unlink('snap_' + snap.id, function () { /* don't care */ });
       });
