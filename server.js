@@ -67,14 +67,14 @@ client.on('sync', function (data) {
       } 
       catch (err) {
       	console.log("Couldn't create file");
-        setTimeout(client.sync, 300000);
+        setTimeout(client.sync, 1000);
       }
       try {
         client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
       }
       catch (err) {
         console.log("Error getting blob for " + snap.id);
-        setTimeout(client.sync, 30000);
+        setTimeout(client.sync, 1000);
       }
 
       setTimeout(function () {
