@@ -50,17 +50,17 @@
     					  myDataRef.remove();
     				  }
             }
-            
-            myDataRef.on('child_added', function(snapshot) {
-              var message = snapshot.val();
-              displayChatMessage(message.name, message.text);
-            });
-
-            function displayChatMessage(name, text, timestamp) {
-              $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
-              $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
-            };
           });
+            
+          myDataRef.on('child_added', function(snapshot) {
+            var message = snapshot.val();
+            displayChatMessage(message.name, message.text);
+          });
+
+          function displayChatMessage(name, text, timestamp) {
+            $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
+            $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+          };
         </script>
       </div>
     </div>
