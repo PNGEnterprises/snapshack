@@ -113,9 +113,7 @@ client.on('sync', function (data) {
 });
 
 
-setInterval(function() {
-  client.sync();
-}, 15000);
+setInterval(client.sync, 15000);
 
 
 
