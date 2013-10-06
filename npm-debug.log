@@ -1,0 +1,142 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/bin/npm', 'install', 'connect' ]
+info using npm@1.1.4
+info using node@v0.6.12
+verbose config file /home/ubuntu/.npmrc
+verbose config file /usr/etc/npmrc
+verbose config file /usr/share/npm/npmrc
+verbose caching /home/ubuntu/snapcat/package.json
+verbose loadDefaults snapcat@0.0.0
+verbose from cache /home/ubuntu/snapcat/package.json
+verbose readDependencies: using package.json deps
+verbose cache add [ 'connect@~2.9.0', null ]
+silly cache add: name, spec, args [ undefined, 'connect@~2.9.0', [ 'connect@~2.9.0', null ] ]
+verbose parsed url { pathname: 'connect@~2.9.0',
+verbose parsed url   path: 'connect@~2.9.0',
+verbose parsed url   href: 'connect@~2.9.0' }
+silly cache add: name, spec, args [ 'connect', '~2.9.0', [ 'connect', '~2.9.0' ] ]
+verbose parsed url { pathname: '~2.9.0', path: '~2.9.0', href: '~2.9.0' }
+verbose addNamed [ 'connect', '~2.9.0' ]
+verbose addNamed [ null, '>=2.9.0- <2.10.0-' ]
+silly name, range, hasData [ 'connect', '>=2.9.0- <2.10.0-', false ]
+verbose raw, before any munging connect
+verbose url resolving [ 'https://registry.npmjs.org/', './connect' ]
+verbose url resolved https://registry.npmjs.org/connect
+verbose etag "BMYU0F59PKAU2TU809X3GINQK"
+http GET https://registry.npmjs.org/connect
+http 304 https://registry.npmjs.org/connect
+silly get cb [ 304,
+silly get cb   { server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+silly get cb     etag: '"BMYU0F59PKAU2TU809X3GINQK"',
+silly get cb     date: 'Sun, 06 Oct 2013 09:40:14 GMT',
+silly get cb     'content-length': '0' } ]
+verbose etag connect from cache
+silly name, range, hasData 2 [ 'connect', '>=2.9.0- <2.10.0-', true ]
+silly versions [ 'connect',
+silly versions   [ '0.0.1',
+silly versions     '0.0.2',
+silly versions     '0.0.3',
+silly versions     '0.0.4',
+silly versions     '0.0.5',
+silly versions     '0.0.6',
+silly versions     '0.1.0',
+silly versions     '0.2.0',
+silly versions     '0.2.1',
+silly versions     '0.2.2',
+silly versions     '0.2.3',
+silly versions     '0.2.4',
+silly versions     '0.2.5',
+silly versions     '0.2.6',
+silly versions     '0.2.7',
+silly versions     '0.3.0',
+silly versions     '0.4.0',
+silly versions     '0.5.0',
+silly versions     '0.5.1',
+silly versions     '0.5.2',
+silly versions     '0.5.3',
+silly versions     '0.5.4',
+silly versions     '0.5.5',
+silly versions     '0.5.6',
+silly versions     '0.5.7',
+silly versions     '0.5.8',
+silly versions     '0.5.9',
+silly versions     '0.5.10',
+silly versions     '1.0.0',
+silly versions     '1.0.1',
+silly versions     '1.7.2',
+silly versions     '1.7.3',
+silly versions     '1.8.0',
+silly versions     '1.8.1',
+silly versions     '1.8.2',
+silly versions     '1.8.3',
+silly versions     '1.8.4',
+silly versions     '1.8.5',
+silly versions     '2.0.0',
+silly versions     '2.0.1',
+silly versions     '2.0.2',
+silly versions     '2.0.3',
+silly versions     '1.8.6',
+silly versions     '2.1.0',
+silly versions     '2.1.1',
+silly versions     '2.1.2',
+silly versions     '1.8.7',
+silly versions     '2.1.3',
+silly versions     '2.2.0',
+silly versions     '2.2.1',
+silly versions     '2.2.2',
+silly versions     '2.3.0',
+silly versions     '2.3.1',
+silly versions     '2.3.2',
+silly versions     '2.3.3',
+silly versions     '1.9.0',
+silly versions     '1.9.1',
+silly versions     '2.3.4',
+silly versions     '2.3.5',
+silly versions     '2.3.6',
+silly versions     '2.3.7',
+silly versions     '1.9.2',
+silly versions     '2.3.8',
+silly versions     '2.3.9',
+silly versions     '2.4.0',
+silly versions     '2.4.1',
+silly versions     '2.4.2',
+silly versions     '2.4.3',
+silly versions     '2.4.4',
+silly versions     '2.4.5',
+silly versions     '2.4.6',
+silly versions     '2.5.0',
+silly versions     '2.6.0',
+silly versions     '2.6.1',
+silly versions     '2.6.2',
+silly versions     '2.7.0',
+silly versions     '2.7.1',
+silly versions     '2.7.2',
+silly versions     '2.7.3',
+silly versions     '2.7.4',
+silly versions     '2.7.5',
+silly versions     '2.7.6',
+silly versions     '2.7.7',
+silly versions     '2.7.8' ] ]
+ERR! Error: No compatible version found: connect@'>=2.9.0- <2.10.0-'
+ERR! Valid install targets:
+ERR! ["0.0.1","0.0.2","0.0.3","0.0.4","0.0.5","0.0.6","0.1.0","0.2.0","0.2.1","0.2.2","0.2.3","0.2.4","0.2.5","0.2.6","0.2.7","0.3.0","0.4.0","0.5.0","0.5.1","0.5.2","0.5.3","0.5.4","0.5.5","0.5.6","0.5.7","0.5.8","0.5.9","0.5.10","1.0.0","1.0.1","1.7.2","1.7.3","1.8.0","1.8.1","1.8.2","1.8.3","1.8.4","1.8.5","2.0.0","2.0.1","2.0.2","2.0.3","1.8.6","2.1.0","2.1.1","2.1.2","1.8.7","2.1.3","2.2.0","2.2.1","2.2.2","2.3.0","2.3.1","2.3.2","2.3.3","1.9.0","1.9.1","2.3.4","2.3.5","2.3.6","2.3.7","1.9.2","2.3.8","2.3.9","2.4.0","2.4.1","2.4.2","2.4.3","2.4.4","2.4.5","2.4.6","2.5.0","2.6.0","2.6.1","2.6.2","2.7.0","2.7.1","2.7.2","2.7.3","2.7.4","2.7.5","2.7.6","2.7.7","2.7.8"]
+ERR!     at installTargetsError (/usr/share/npm/lib/cache.js:488:10)
+ERR!     at next_ (/usr/share/npm/lib/cache.js:438:17)
+ERR!     at next (/usr/share/npm/lib/cache.js:415:44)
+ERR!     at /usr/share/npm/lib/cache.js:408:5
+ERR!     at saved (/usr/share/npm/lib/utils/npm-registry-client/get.js:147:7)
+ERR!     at Object.oncomplete (/usr/lib/nodejs/graceful-fs.js:230:7)
+ERR! You may report this log at:
+ERR!     <http://bugs.debian.org/npm>
+ERR! or use
+ERR!     reportbug --attach /home/ubuntu/snapcat/npm-debug.log npm
+ERR! 
+ERR! System Linux 3.2.0-40-virtual
+ERR! command "node" "/usr/bin/npm" "install" "connect"
+ERR! cwd /home/ubuntu/snapcat
+ERR! node -v v0.6.12
+ERR! npm -v 1.1.4
+ERR! message No compatible version found: connect@'>=2.9.0- <2.10.0-'
+ERR! message Valid install targets:
+ERR! message ["0.0.1","0.0.2","0.0.3","0.0.4","0.0.5","0.0.6","0.1.0","0.2.0","0.2.1","0.2.2","0.2.3","0.2.4","0.2.5","0.2.6","0.2.7","0.3.0","0.4.0","0.5.0","0.5.1","0.5.2","0.5.3","0.5.4","0.5.5","0.5.6","0.5.7","0.5.8","0.5.9","0.5.10","1.0.0","1.0.1","1.7.2","1.7.3","1.8.0","1.8.1","1.8.2","1.8.3","1.8.4","1.8.5","2.0.0","2.0.1","2.0.2","2.0.3","1.8.6","2.1.0","2.1.1","2.1.2","1.8.7","2.1.3","2.2.0","2.2.1","2.2.2","2.3.0","2.3.1","2.3.2","2.3.3","1.9.0","1.9.1","2.3.4","2.3.5","2.3.6","2.3.7","1.9.2","2.3.8","2.3.9","2.4.0","2.4.1","2.4.2","2.4.3","2.4.4","2.4.5","2.4.6","2.5.0","2.6.0","2.6.1","2.6.2","2.7.0","2.7.1","2.7.2","2.7.3","2.7.4","2.7.5","2.7.6","2.7.7","2.7.8"]
+verbose exit [ 1, true ]
