@@ -2,7 +2,7 @@ var connect = require('connect');
 var snapchat = require('snapchat');
 var sio = require('socket.io');
 var fs = require('fs');
-var db = require('./db');
+//var db = require('./db');
 
 var port = process.env.PORT || 8080;
 var server = connect.createServer(
@@ -31,7 +31,6 @@ var server = connect.createServer(
 var snaps = []
 var max_ts = 0;
 
-
 server = server.listen(port, function () {
     console.log("Listening on port " + port);
 });
@@ -53,6 +52,7 @@ client.on('sync', function (data) {
   if(typeof data.snaps === 'undefined') {
     console.log('MORE ERRORS!!!!');
     console.log(data);
+    setTimeout(client.sync, 1000);
     return;
   }
 
@@ -60,7 +60,9 @@ client.on('sync', function (data) {
   data.snaps.forEach(function (snap) {
     console.log("SHIT");
     if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
-      if (snap.ts <= max_ts || snap.m == 1) return;
+      if (snap.ts <= max_ts || snap.m == 1) {
+        return;
+      };
       // XXX TODO Delete files after written
       try {
       	var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename
@@ -110,15 +112,11 @@ client.on('sync', function (data) {
       }, 5000);
     }
   });
+
+  setTimeout(client.sync, 30000);
 });
 
-
-setInterval(client.sync, 15000);
-
-
-
-
-
+client.sync();
 
 function LETSRUNTHISSHIT() {
   if (snaps.length == 0) {
@@ -138,13 +136,6 @@ function LETSRUNTHISSHIT() {
   setTimeout(LETSRUNTHISSHIT, THESNAP.time * 1000);
 }
 
-
 /// FUCKING WOW
 LETSRUNTHISSHIT();
-
-
-
-
-
-
 
