@@ -38,12 +38,16 @@ client.on('sync', function (data) {
       // XXX TODO Delete files after written
       var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename      
       out.on('finish', function () {
-        out.readable = true; // allow reading from stream later
-        var img_str = fs.readFileSync('snap_' + snap.id);
-        img_str = new Buffer(img_str).toString('base64');
-        console.log("img_str: " + img_str);
-        //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
-        fs.unlink('snap_' + snap.id, function () { /* don't care */ });
+      	try {
+	        var img_str = fs.readFileSync('snap_' + snap.id);
+	        img_str = new Buffer(img_str).toString('base64');
+	        console.log("img_str: " + img_str);
+	        //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
+	        fs.unlink('snap_' + snap.id, function () { /* don't care */ });
+	    }
+	    catch (err) {
+	    	/* Ignore lol */
+	    }
       });
       try {
       	client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
