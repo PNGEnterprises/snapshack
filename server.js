@@ -47,14 +47,14 @@ client.on('sync', function (data) {
             fs.unlink('snap_' + snap.id, function () { /* don't care */ });
         }
         catch (err) {
-          /* Ignore lol */
+          return;
         }
       });
       try {
         client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
       }
       catch (err) {
-        /* Ignore lol */
+        continue;
       }
     }
   };
