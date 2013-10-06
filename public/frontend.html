@@ -3,28 +3,28 @@
   <head>
     <script src='https://cdn.firebase.com/v0/firebase.js'></script>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
-    <script src='http://cdn.socket.io/stable/socket.io.js'></script>
+    <script src='/socket.io/socket.io.js'></script>
     <script type="text/javascript"> 
       var socket = io.connect('http://localhost:8080');
       socket.on('IMAGE', function (data) {
-      	$('#snap').src = 'data:image/jpeg;base64,' + data.img_data;
+      	$('#snap').attr('src', 'data:image/jpeg;base64,' + data.img_data);
       	// username
       	//duration
       	// timestamp
+      	console.log("image message shit");
       });
       socket.on('NOIMAGE', function() {
-      	$('#snap').src = 'img/noimage.png';
+      	$('#snap').attr('src', 'img/noimage.png');
+      	console.log("fuck");
       });
-
     </script>
   </head>
   <body>
-    
     <div>
       <div style="float:left;">
       	<img id="snap">
       </div>
-      <div id='messagesDiv' style="margin-left:50%; float:right;">
+      <div id='messagesDiv' style="float:right;">
         <input type='text' id='nameInput' placeholder='Name'>
         <input type='text' id='messageInput' placeholder='Message'>
         <script>
@@ -32,7 +32,7 @@
           $('#messageInput').keypress(function (e) {
           if (e.keyCode == 13) {
             var name = $('#nameInput').val();
-            var text = $('#messageInput').val();
+            var text = $('#messageInput').val();h
             var timestamp = Firebase.ServerValue.TIMESTAMP
             myDataRef.push({name: name, text: text, timestamp: timestamp});
             $('#messageInput').val('');

@@ -32,7 +32,7 @@ var snaps = []
 var max_ts = 0;
 
 
-server.listen(port, function () {
+server = server.listen(port, function () {
     console.log("Listening on port " + port);
 });
 var io = sio.listen(server);
@@ -58,20 +58,26 @@ client.on('sync', function (data) {
 
   // Loop through snaps received
   data.snaps.forEach(function (snap) {
+    console.log("SHIT");
     if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
-      console.log('Snap received with id ' + snap.id);
-      if (snap.ts < max_ts) return;
+      if (snap.ts <= max_ts) return;
       // XXX TODO Delete files after written
       try {
       	var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename
       } 
       catch (err) {
       	console.log("Couldn't create file");
-      }     
-      out.on('finish', function () {
+      }
+      try {
+        client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
+      }
+      catch (err) {
+        console.log("Error getting blob for " + snap.id);
+      }
+
+      setTimeout(function () {
         try {
-        		console.log('Snap saved' + snap.id);
-            //var img_str = fs.readFileSync('snap_' + snap.id);
+            var img_str = fs.readFileSync('snap_' + snap.id);
             img_str = new Buffer(img_str).toString('base64');
             snaps.push({
               id: snap.id,
@@ -84,7 +90,7 @@ client.on('sync', function (data) {
             console.log("SNAP ADDED");
 
             if (snap.ts > max_ts)
-              max_ts = snap.ts
+              max_ts = snap.ts;
 
             //console.log("img_str: " + img_str);
             //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
@@ -95,13 +101,7 @@ client.on('sync', function (data) {
           /* Ignore lol */
           console.log(err);
         }
-      });
-      try {
-        client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
-      }
-      catch (err) {
-        console.log("Error getting blob for " + snap.id);
-      }
+      }, 5000);
     }
   });
 });
@@ -109,7 +109,7 @@ client.on('sync', function (data) {
 
 setInterval(function() {
   client.sync();
-}, 3000);
+}, 10000);
 
 
 
@@ -121,13 +121,15 @@ function LETSRUNTHISSHIT() {
     //SEND GAY SHIT MESSAGE
     io.sockets.emit('NOIMAGE');
     setTimeout(LETSRUNTHISSHIT, 1000);
+    console.log("EMITTING NO IMAGE");
 
     return;
   }
   var THESNAP = snaps[0];
   // SEND THE FUCKING SNAP
   io.sockets.emit('IMAGE', THESNAP);
-  snaps.splice(1);
+  console.log("EMITTING IMAGE");
+  snaps = snaps.splice(1);
 
   setTimeout(LETSRUNTHISSHIT, THESNAP.time * 1000);
 }
