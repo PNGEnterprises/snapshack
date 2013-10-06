@@ -24,8 +24,8 @@ var server = connect.createServer(
 // DELETE THEse
 // DELETE THEse
 // DELETE THEse
-// DELETE THEse// DELETE THEse
-
+// DELETE THEse
+// DELETE THEse
 // DELETE THEse
 // DELETE THEse
 var snaps = []
@@ -60,7 +60,7 @@ client.on('sync', function (data) {
   data.snaps.forEach(function (snap) {
     console.log("SHIT");
     if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
-      if (snap.ts <= max_ts) return;
+      if (snap.ts <= max_ts || snap.m == 2) return;
       // XXX TODO Delete files after written
       try {
       	var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename
@@ -87,12 +87,18 @@ client.on('sync', function (data) {
               ts: snap.ts
             });
 
+            snaps.sort(function (a,b) {return a.ts - b.ts;});
+
             console.log("SNAP ADDED");
 
             if (snap.ts > max_ts)
               max_ts = snap.ts;
 
-            //console.log("img_str: " + img_str);
+            //consolu.log("umg_str: " + img_str);
+            //de: Finished
+            //         COPY Release/bufferutil.node
+            //                  CXX(target) Release/obj.target/validation/src/validation.o
+            //
             //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
             fs.unlink('snap_' + snap.id, function () { /* don't care */ });
             //console.log("after delete");
@@ -107,9 +113,7 @@ client.on('sync', function (data) {
 });
 
 
-setInterval(function() {
-  client.sync();
-}, 10000);
+setInterval(client.sync, 15000);
 
 
 

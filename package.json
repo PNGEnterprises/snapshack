@@ -1,6 +1,6 @@
 {
   "name": "snapcat",
-  "version": "0.0.0",
+  "version": "0.0.0-4",
   "description": "Snapcat - Public snaps",
   "main": "server.js",
   "dependencies": {
@@ -26,5 +26,9 @@
   "author": "Justin Chines, Tim Calvert, Nolan Manor, John Crespi",
   "license": "All rights reserved",
   "readmeFilename": "README.md",
-  "gitHead": "cd495d9fd8a3ebba14a3061188674e61e9076937"
+  "gitHead": "cd495d9fd8a3ebba14a3061188674e61e9076937",
+  "subdomain": "snapshack",
+  "engines": {
+    "node": "0.10.x"
+  }
 }
