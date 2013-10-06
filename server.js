@@ -2,7 +2,7 @@ var connect = require('connect');
 var snapchat = require('snapchat');
 var sio = require('socket.io');
 var fs = require('fs');
-var db = require('./db');
+//var db = require('./db');
 
 var port = process.env.PORT || 8080;
 var server = connect.createServer(
@@ -30,7 +30,6 @@ var server = connect.createServer(
 // DELETE THEse
 var snaps = []
 var max_ts = 0;
-
 
 server = server.listen(port, function () {
     console.log("Listening on port " + port);
@@ -61,7 +60,6 @@ client.on('sync', function (data) {
     console.log("SHIT");
     if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
       if (snap.ts <= max_ts || snap.m == 1) {
-        setTimeout(client.sync, 10000);
         return;
       };
       // XXX TODO Delete files after written
@@ -70,14 +68,12 @@ client.on('sync', function (data) {
       } 
       catch (err) {
       	console.log("Couldn't create file");
-        setTimeout(client.sync, 1000);
       }
       try {
         client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
       }
       catch (err) {
         console.log("Error getting blob for " + snap.id);
-        setTimeout(client.sync, 1000);
       }
 
       setTimeout(function () {
@@ -119,10 +115,7 @@ client.on('sync', function (data) {
   setTimeout(client.sync, 30000);
 });
 
-
 client.sync();
-
-
 
 function LETSRUNTHISSHIT() {
   if (snaps.length == 0) {
@@ -142,13 +135,6 @@ function LETSRUNTHISSHIT() {
   setTimeout(LETSRUNTHISSHIT, THESNAP.time * 1000);
 }
 
-
 /// FUCKING WOW
 LETSRUNTHISSHIT();
-
-
-
-
-
-
 
