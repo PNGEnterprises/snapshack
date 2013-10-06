@@ -1,5 +1,6 @@
 var connect = require('connect');
 var snapchat = require('snapchat');
+var io = require('socket.io');
 var fs = require('fs');
 var db = require('./db');
 
@@ -114,12 +115,12 @@ setInterval(function() {
 function LETSRUNTHISSHIT() {
   if (snaps.length == 0) {
     //SEND GAY SHIT MESSAGE
-    socket.emit('NOIMAGE');
+    io.sockets.emit('NOIMAGE');
     setTimeout(LETSRUNTHISSHIT, 1000);
   }
   var THESNAP = snaps[0];
   // SEND THE FUCKING SNAP
-  socket.emit('IMAGE', THESNAP);
+  io.sockets.emit('IMAGE', THESNAP);
   snaps.splice(1);
 
   setTimeout(LETSRUNTHISSHIT, snap.time * 1000);
