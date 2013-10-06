@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src='https://cdn.firebase.com/v0/firebase.js'></script>
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+		<script> 
+			function show_image(src, width, height, alt)
+			{
+				var img = document.createElement("img");
+				img.src = src;
+				img.width = width;
+				img.height = height;
+				img.alt = alt;
+				document.body.appendChild(img);
+			}
+			function addImage()
+			{
+				var src = "C:/Users/Nolan/Desktop/k6v7706.png";	//get next from DB
+				d = document,
+				e = d.documentElement,
+				g = d.getElementsByTagName('body')[0],
+				x = w.innerWidth || e.clientWidth || g.clientWidth,
+				y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+				var imgHeight = y * 0.9;
+				var imgWidth = imgHeight * 9 / 16;
+				show_image(src, imgWidth,imgHeight, "An Image");
+				//<img src="C:/Users/Nolan/Desktop/k6v7706.png" height="640px" width="360px" align = "left" border = "0"/>
+			}
+			function getSource()
+			{
+				return "C:/Users/Nolan/Desktop/k6v7706.png";
+			}
+			d = document,
+			e = d.documentElement,
+			g = d.getElementsByTagName('body')[0],
+			x = w.innerWidth || e.clientWidth || g.clientWidth,
+			y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+			var imgHeight = y * 0.9;
+			var imgWidth = imgHeight * 9 / 16;
+			function getHeight()
+			{
+				return imgHeight;
+			}
+			funciton getWidth()
+			{
+				return imgWidth;
+			}
+			//<img src="getSource();" height="getHeight();" width="getWidth();" align = "left" border = "0"/>
+		</script>
+	</head>
+	<body>
+		<div>
+			<img src="C:/Users/Nolan/Desktop/k6v7706.png" height="640px" width="360px" align="left" border = "0"/>
+			<div id='messagesDiv'></div>
+			<input type='text' id='nameInput' placeholder='Name'>
+			<input type='text' id='messageInput' placeholder='Message'>
+			<script>
+			  var myDataRef = new Firebase('https://fm65i1731k9.firebaseio-demo.com/');
+			  $('#messageInput').keypress(function (e) {
+				if (e.keyCode == 13) {
+				  var name = $('#nameInput').val();
+				  var text = $('#messageInput').val();
+				  var timestamp = Firebase.ServerValue.TIMESTAMP
+				  myDataRef.push({name: name, text: text, timestamp: timestamp});
+				  $('#messageInput').val('');
+				}
+			  });
+			  myDataRef.on('child_added', function(snapshot) {
+				var message = snapshot.val();
+				displayChatMessage(message.name, message.text);
+			  });
+			  function displayChatMessage(name, text, timestamp) {
+				$('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
+				$('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+			  };
+			</script>
+		</div>
+	</body>
+ </html>
