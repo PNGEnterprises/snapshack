@@ -45,7 +45,12 @@ client.on('sync', function (data) {
         //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
         fs.unlink('snap_' + snap.id, function () { /* don't care */ });
       });
-      client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
+      try {
+      	client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
+      }
+      catch {
+      	/* Ignore lol */
+      }
     }
   };
 });
