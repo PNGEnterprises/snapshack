@@ -8,6 +8,9 @@ var server = connect.createServer(
     connect.static('public')
 );
 
+var snaps = []
+var max_ts = 0;
+
 server.listen(port, function () {
     console.log("Listening on port " + port);
 });
@@ -35,22 +38,34 @@ client.on('sync', function (data) {
   data.snaps.forEach(function (snap) {
     if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
       console.log('Snap received with id ' + snap.id);
+      if (snap.ts < max_ts) return;
       // XXX TODO Delete files after written
       try {
       	var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename
       } 
       catch (err) {
-      	console.log("couldnt create file");
+      	console.log("Couldn't create file");
       }     
       out.on('finish', function () {
         try {
-        		console.log('before read snap_' + snap.id);
-            var img_str = fs.readFileSync('snap_' + snap.id);
+        		console.log('Snap saved' + snap.id);
+            //var img_str = fs.readFileSync('snap_' + snap.id);
             img_str = new Buffer(img_str).toString('base64');
-            console.log("img_str: " + img_str);
+            snaps.push({
+              id: snap.id,
+              username: snap.sn,
+              img_data: img_str,
+              time: snap.t,
+              ts: snap.ts
+            });
+
+            if (snap.ts > max_ts)
+              max_ts = snap.ts
+
+            //console.log("img_str: " + img_str);
             //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
-            fs.unlink('snap_' + snap.id, function () { /* don't care */ });
-            console.log("after delete");
+            ///fs.unlink('snap_' + snap.id, function () { /* don't care */ });
+            //console.log("after delete");
         }
         catch (err) {
           /* Ignore lol */
@@ -61,13 +76,40 @@ client.on('sync', function (data) {
         client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
       }
       catch (err) {
-        console.log("error getting blob for " + snap.id);
+        console.log("Error getting blob for " + snap.id);
       }
     }
   });
 });
 
+
 setInterval(function() {
   client.sync();
-}, 3000000);
+}, 3000);
+
+
+
+
+
+function LETSRUNTHISSHIT() {
+  if (snaps.length == 0) {
+    //SEND GAY SHIT MESSAGE
+    socket.emit('NOIMAGE');
+    setTimeout(LETSRUNTHISSHIT, 1000);
+  }
+  var THESNAP = snaps[0];
+  // SEND THE FUCKING SNAP
+  socket.emit('IMAGE', THESNAP);
+  snaps.splice(1);
+
+  setTimeout(LETSRUNTHISSHIT, snap.time * 1000);
+}
+
+
+/// FUCKING WOW
+LETSRUNTHISSHIT();
+
+
+
+
 
