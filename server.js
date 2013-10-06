@@ -86,7 +86,7 @@ client.on('sync', function (data) {
 
             //console.log("img_str: " + img_str);
             //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
-            ///fs.unlink('snap_' + snap.id, function () { /* don't care */ });
+            fs.unlink('snap_' + snap.id, function () { /* don't care */ });
             //console.log("after delete");
         }
         catch (err) {
