@@ -52,6 +52,7 @@ client.on('sync', function (data) {
   if(typeof data.snaps === 'undefined') {
     console.log('MORE ERRORS!!!!');
     console.log(data);
+    setTimeout(client.sync, 1000);
     return;
   }
 
