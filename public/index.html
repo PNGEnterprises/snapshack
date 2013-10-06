@@ -7,14 +7,18 @@
     <script type="text/javascript"> 
       var socket = io.connect('http://snapshack.nodejitsu.com/');
       socket.on('IMAGE', function (data) {
+        $('#snap').fadeOut(75);
       	$('#snap').attr('src', 'data:image/jpeg;base64,' + data.img_data);
+        $('#snap').fadeIn(75);
       	// username
       	// duration
       	// timestamp
       	console.log("image message shit");
       });
       socket.on('NOIMAGE', function() {
+        $('#snap').fadeOut(75);
       	$('#snap').attr('src', 'img/noimage.png');
+        $('#snap').fadeIn(75);
       	console.log("fuck");
       });
     </script>
@@ -25,43 +29,45 @@
         <img src="img/logo.png" style="width:50%;"><br />
         <img src="img/noimage.png" id="snap" style="padding: 20px;max-width:480px;margin-left:auto;margin-right:auto;">
       </div>
-      <div id='messagesDiv' style="float:right; max-width: 400px; height: 30em; overflow: auto;">
+      <div id='messagesDiv' style="float:right; max-width: 400px; height: 800px;">
         <p style="text-align:center;"><i>Made at HackMIT, October 2013</i><br />by<br />
         <i><a href="http://twitter.com/justinderbox">@justinderbox</a> / <a href="http://twitter.com/tcalvert93">@tcalvert93</a> / <a href="mailto:npmanor@wpi.edu">Nolan Manor</a> / <a href="http://twitter.com/The_Iron_Shrek">@The_Iron_Shrek</a></i></p>
         <b style="font-size:16pt;">Chat</b><br />
         <input type='text' id='nameInput' placeholder='Name'>
         <input type='text' id='messageInput' placeholder='Message'>
-        <script>
-          var myDataRef = new Firebase('https://fm65i1731k9.firebaseio-demo.com/');
-          $('#messageInput').keypress(function (e) {
-            if (e.keyCode == 13) {
-              var name = $('#nameInput').val();
-              var text = $('#messageInput').val();
-              var timestamp = Firebase.ServerValue.TIMESTAMP;
-              myDataRef.push({name: name, text: text, timestamp: timestamp});
-              $('#messageInput').val('');
-              myDataRef.once('value', function(dataSnapshot) {
-  				      // store dataSnapshot for use in below examples.
-    					  myDataRefSnapshot = dataSnapshot;
-    				  });
-    				  var children = myDataRefSnapshot.numChildren();
-    				  if(children > 30)
-    				  {
-    					  myDataRef.remove();
-    				  }
-            }
-          });
-            
-          myDataRef.on('child_added', function(snapshot) {
-            var message = snapshot.val();
-            displayChatMessage(message.name, message.text);
-          });
+        <div id="messageView" style="height: 800px;overflow:auto;">
+          <script>
+            var myDataRef = new Firebase('https://fm65i1731k9.firebaseio-demo.com/');
+            $('#messageInput').keypress(function (e) {
+              if (e.keyCode == 13) {
+                var name = $('#nameInput').val();
+                var text = $('#messageInput').val();
+                var timestamp = Firebase.ServerValue.TIMESTAMP;
+                myDataRef.push({name: name, text: text, timestamp: timestamp});
+                $('#messageInput').val('');
+                myDataRef.once('value', function(dataSnapshot) {
+    				      // store dataSnapshot for use in below examples.
+      					  myDataRefSnapshot = dataSnapshot;
+      				  });
+      				  var children = myDataRefSnapshot.numChildren();
+      				  if(children > 30)
+      				  {
+      					  myDataRef.remove();
+      				  }
+              }
+            });
+              
+            myDataRef.on('child_added', function(snapshot) {
+              var message = snapshot.val();
+              displayChatMessage(message.name, message.text);
+            });
 
-          function displayChatMessage(name, text, timestamp) {
-            $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
-            $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
-          };
-        </script>
+            function displayChatMessage(name, text, timestamp) {
+              $('<div/>').text(text).prepend($('<em/>').text(name+': ')).prependTo($('#messageView'));
+              //$('#messagesView')[0].scrollTop = $('#messagesView')[0].scrollHeight;
+            };
+          </script>
+        </div>
       </div>
     </div>
   </body>
