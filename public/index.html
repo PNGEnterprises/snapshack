@@ -34,7 +34,7 @@
           $('#messageInput').keypress(function (e) {
           if (e.keyCode == 13) {
             var name = $('#nameInput').val();
-            var text = $('#messageInput').val();h
+            var text = $('#messageInput').val();
             var timestamp = Firebase.ServerValue.TIMESTAMP
             myDataRef.push({name: name, text: text, timestamp: timestamp});
             $('#messageInput').val('');
