@@ -3,7 +3,7 @@ var db = new firebase('https://snapshack.firebaseio.com/');
 
 module.exports.addSnap = function (id, uname, image_b64, duration, timestamp) {
   console.log("hi");
-  var snap = db.child(id);
+  var snap = db.child('/snaps/' + id);
   snap.set({
     username: uname,
     image: image_b64, // MUST BE BASE64 STRING
@@ -13,6 +13,7 @@ module.exports.addSnap = function (id, uname, image_b64, duration, timestamp) {
       if (err)
         console.log("Error saving snap." + err);
       else
-        console.log("Added" + id);
+        console.log("Added " + id);
     });
+  console.log("derp");
 };
