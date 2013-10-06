@@ -60,7 +60,10 @@ client.on('sync', function (data) {
   data.snaps.forEach(function (snap) {
     console.log("SHIT");
     if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
-      if (snap.ts <= max_ts || snap.m == 1) return;
+      if (snap.ts <= max_ts || snap.m == 1) {
+        setTimeout(client.sync, 10000);
+        return;
+      };
       // XXX TODO Delete files after written
       try {
       	var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename
