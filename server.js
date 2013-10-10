@@ -9,25 +9,7 @@ var server = connect.createServer(
     connect.static('public')
 );
 
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
-// DELETE THEse
+/* Storing all data in the server. LEL */
 var snaps = []
 var max_ts = 0;
 
@@ -37,28 +19,35 @@ server = server.listen(port, function () {
 var io = sio.listen(server);
 
 // Snapchat client
-var client = new snapchat.Client();
+var client;
+
+function newClient() {
+  client = new snapchat.Client();
+  client.on('error', clientError);
+  client.on('sync', clientSync);
+  client.login('thesnapshack', process.env.SC_PASS);
+}
+
+newClient();
 
 // Log errors
-client.on('error', function (data) {
+function clientError(data) {
   console.log('ERROR!!!!');
   console.log(data);
-});
+  newClient(); // RESET IT
+}
 
-client.login('thesnapshack', process.env.SC_PASS);
-
-client.on('sync', function (data) {
+function clientSync(data) {
   // Issues?
   if(typeof data.snaps === 'undefined') {
     console.log('MORE ERRORS!!!!');
     console.log(data);
-    setTimeout(client.sync, 1000);
     return;
   }
 
   // Loop through snaps received
   data.snaps.forEach(function (snap) {
-    console.log("SHIT");
+    console.log("Snap received");
     if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
       if (snap.ts <= max_ts || snap.m == 1) {
         return;
@@ -91,16 +80,11 @@ client.on('sync', function (data) {
 
             snaps.sort(function (a,b) {return a.ts - b.ts;});
 
-            console.log("SNAP ADDED");
+            console.log("Snap added!");
 
             if (snap.ts > max_ts)
               max_ts = snap.ts;
 
-            //consolu.log("umg_str: " + img_str);
-            //de: Finished
-            //         COPY Release/bufferutil.node
-            //                  CXX(target) Release/obj.target/validation/src/validation.o
-            //
             //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
             fs.unlink('snap_' + snap.id, function () { /* don't care */ });
             //console.log("after delete");
@@ -112,17 +96,20 @@ client.on('sync', function (data) {
       }, 5000);
     }
   });
+}
 
-  setTimeout(client.sync, 30000);
-});
+var count = 0;
+function runIt() {
+  if (count % 10 == 0) {
+    client.sync();
+    console.log("client.sync called");
+  }
+  count++;
 
-client.sync();
-
-function LETSRUNTHISSHIT() {
   if (snaps.length == 0) {
     //SEND GAY SHIT MESSAGE
     io.sockets.emit('NOIMAGE');
-    setTimeout(LETSRUNTHISSHIT, 1000);
+    setTimeout(runIt, 1000);
     console.log("EMITTING NO IMAGE");
 
     return;
@@ -133,9 +120,8 @@ function LETSRUNTHISSHIT() {
   console.log("EMITTING IMAGE");
   snaps = snaps.splice(1);
 
-  setTimeout(LETSRUNTHISSHIT, THESNAP.time * 1000);
+  setTimeout(runIt, THESNAP.time * 1000);
 }
 
-/// FUCKING WOW
-LETSRUNTHISSHIT();
+runIt();
 
