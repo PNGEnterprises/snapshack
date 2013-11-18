@@ -1,12 +1,13 @@
 {
-  "name": "snapcat",
-  "version": "0.0.0",
-  "description": "Snapcat - Public snaps",
+  "name": "snapchat",
+  "version": "0.0.0-28",
+  "description": "Snapchat - Public snaps",
   "main": "server.js",
   "dependencies": {
     "snapchat": "~0.0.1",
     "connect": "~2.9.0",
-    "firebase": "~0.6.3"
+    "firebase": "~0.6.3",
+    "socket.io": "~0.9.16"
   },
   "devDependencies": {},
   "scripts": {
@@ -15,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/process/snapcat.git"
+    "url": "git://github.com/process/snapchat.git"
   },
   "keywords": [
     "Snapchat",
@@ -25,5 +26,9 @@
   "author": "Justin Chines, Tim Calvert, Nolan Manor, John Crespi",
   "license": "All rights reserved",
   "readmeFilename": "README.md",
-  "gitHead": "cd495d9fd8a3ebba14a3061188674e61e9076937"
+  "gitHead": "cd495d9fd8a3ebba14a3061188674e61e9076937",
+  "subdomain": "snapshack",
+  "engines": {
+    "node": "0.10.x"
+  }
 }

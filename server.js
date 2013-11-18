@@ -1,28 +1,43 @@
 var connect = require('connect');
 var snapchat = require('snapchat');
+var sio = require('socket.io');
 var fs = require('fs');
-var db = require('./db');
+//var db = require('./db');
 
 var port = process.env.PORT || 8080;
 var server = connect.createServer(
     connect.static('public')
 );
-server.listen(port, function () {
+
+/* Storing all data in the server. LEL */
+var snaps = []
+var max_ts = 0;
+
+server = server.listen(port, function () {
     console.log("Listening on port " + port);
 });
+var io = sio.listen(server);
 
 // Snapchat client
-var client = new snapchat.Client();
+var client;
+
+function newClient() {
+  client = new snapchat.Client();
+  client.on('error', clientError);
+  client.on('sync', clientSync);
+  client.login('thesnapshack', process.env.SC_PASS);
+}
+
+newClient();
 
 // Log errors
-client.on('error', function (data) {
+function clientError(data) {
   console.log('ERROR!!!!');
   console.log(data);
-});
+  newClient(); // RESET IT
+}
 
-client.login('thesnapshack', process.env.SC_PASS);
-
-client.on('sync', function (data) {
+function clientSync(data) {
   // Issues?
   if(typeof data.snaps === 'undefined') {
     console.log('MORE ERRORS!!!!');
@@ -31,26 +46,80 @@ client.on('sync', function (data) {
   }
 
   // Loop through snaps received
-  for (var snap_ in data.snaps) {
-    var snap = data.snaps[snap_];
+  data.snaps.forEach(function (snap) {
+    console.log("Snap received");
     if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
-      console.log('Snap received with id ' + snap.id);
+      if (snap.ts <= max_ts || snap.m == 1) {
+        return;
+      };
       // XXX TODO Delete files after written
-      var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename      
-      out.on('finish', function () {
-        out.readable = true; // allow reading from stream later
-        var img_str = fs.readFileSync('snap_' + snap.id);
-        img_str = new Buffer(img_str).toString('base64');
-        console.log("img_str: " + img_str);
-        //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
-        fs.unlink('snap_' + snap.id, function () { /* don't care */ });
-      });
-      client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
-    }
-  };
-});
+      try {
+      	var out = fs.createWriteStream('snap_' + snap.id); // Create temp file with snap.id as filename
+      } 
+      catch (err) {
+      	console.log("Couldn't create file");
+      }
+      try {
+        client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
+      }
+      catch (err) {
+        console.log("Error getting blob for " + snap.id);
+      }
 
-setInterval(function() {
-  client.sync();
-}, 3000000);
+      setTimeout(function () {
+        try {
+            var img_str = fs.readFileSync('snap_' + snap.id);
+            img_str = new Buffer(img_str).toString('base64');
+            snaps.push({
+              id: snap.id,
+              username: snap.sn,
+              img_data: img_str,
+              time: snap.t,
+              ts: snap.ts
+            });
+
+            snaps.sort(function (a,b) {return a.ts - b.ts;});
+
+            console.log("Snap added!");
+
+            if (snap.ts > max_ts)
+              max_ts = snap.ts;
+
+            //db.addSnap(snap.id, snap.sn, img_str, snap.t, snap.ts);
+            fs.unlink('snap_' + snap.id, function () { /* don't care */ });
+            //console.log("after delete");
+        }
+        catch (err) {
+          /* Ignore lol */
+          console.log(err);
+        }
+      }, 5000);
+    }
+  });
+}
+
+var count = 0;
+function runIt() {
+  if (count % 10 == 0) {
+    client.sync();
+    console.log("client.sync called");
+  }
+  count++;
+
+  if (snaps.length == 0) {
+    io.sockets.emit('NOIMAGE');
+    setTimeout(runIt, 1000);
+    console.log("EMITTING NO IMAGE");
+
+    return;
+  }
+  var THESNAP = snaps[0];
+  io.sockets.emit('IMAGE', THESNAP);
+  console.log("EMITTING IMAGE");
+  snaps = snaps.splice(1);
+
+  setTimeout(runIt, THESNAP.time * 1000);
+}
+
+runIt();
 

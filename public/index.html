@@ -1,1 +1,79 @@
-The Future Home of the Snap Shack
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script type="text/javascript"> 
+      var noimage = false;
+      var socket = io.connect('http://snapshack.nodejitsu.com/');
+      socket.on('IMAGE', function (data) {
+        noimage = false;
+        $('#snap').fadeOut(75);
+      	$('#snap').attr('src', 'data:image/jpeg;base64,' + data.img_data);
+        $('#snap').fadeIn(75);
+      	// username
+      	// duration
+      	// timestamp
+      	console.log("image message shit");
+      });
+      socket.on('NOIMAGE', function() {
+        if (!noimage) {
+          $('#snap').fadeOut(75);
+        	$('#snap').attr('src', 'img/noimage.png');
+          $('#snap').fadeIn(75);
+        }
+        noimage = true;
+      	console.log("fuck");
+      });
+    </script>
+  </head>
+  <body style="background-color: beige;">
+    <div style="width: 840px; margin-left:auto; margin-right: auto; background-color: white; overflow: hidden; padding: 20px; border-radius: 15px; min-height: 550px; margin-top: 30px;">
+      <div style="float:left; width: 435px;">
+        <img src="img/logo.png" style="margin-left:20px;width:50%;"><br />
+        <img src="img/noimage.png" id="snap" style="padding: 20px;max-width:390px;margin-left:auto;margin-right:auto;">
+      </div>
+      <div id='messagesDiv' style="float:right; width: 400px; height: 800px;">
+        <p style="text-align:center;"><i>Made at HackMIT, October 2013</i><br />by<br />
+        <i><a href="http://twitter.com/justinderbox">@justinderbox</a> / <a href="http://twitter.com/tcalvert93">@tcalvert93</a> / <a href="mailto:npmanor@wpi.edu">Nolan Manor</a> / <a href="http://twitter.com/The_Iron_Shrek">@The_Iron_Shrek</a></i></p>
+        <b style="font-size:16pt;">Chat</b><br />
+        <input type='text' id='nameInput' placeholder='Name'>
+        <input type='text' id='messageInput' placeholder='Message'>
+        <div id="messageView" style="height: 600px;overflow:auto;">
+          <script>
+            var myDataRef = new Firebase('https://fm65i1731k9.firebaseio-demo.com/');
+            $('#messageInput').keypress(function (e) {
+              if (e.keyCode == 13) {
+                var name = $('#nameInput').val();
+                var text = $('#messageInput').val();
+                var timestamp = Firebase.ServerValue.TIMESTAMP;
+                myDataRef.push({name: name, text: text, timestamp: timestamp});
+                $('#messageInput').val('');
+                myDataRef.once('value', function(dataSnapshot) {
+    				      // store dataSnapshot for use in below examples.
+      					  myDataRefSnapshot = dataSnapshot;
+      				  });
+      				  var children = myDataRefSnapshot.numChildren();
+      				  if(children > 30)
+      				  {
+      					  myDataRef.remove();
+      				  }
+              }
+            });
+              
+            myDataRef.on('child_added', function(snapshot) {
+              var message = snapshot.val();
+              displayChatMessage(message.name, message.text);
+            });
+
+            function displayChatMessage(name, text, timestamp) {
+              $('<div/>').text(text).prepend($('<em/>').text(name+': ')).prependTo($('#messageView'));
+              //$('#messagesView')[0].scrollTop = $('#messagesView')[0].scrollHeight;
+            };
+          </script>
+        </div>
+      </div>
+    </div>
+  </body>
+ </html>
