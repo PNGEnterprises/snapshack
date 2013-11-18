@@ -107,7 +107,6 @@ function runIt() {
   count++;
 
   if (snaps.length == 0) {
-    //SEND GAY SHIT MESSAGE
     io.sockets.emit('NOIMAGE');
     setTimeout(runIt, 1000);
     console.log("EMITTING NO IMAGE");
@@ -115,7 +114,6 @@ function runIt() {
     return;
   }
   var THESNAP = snaps[0];
-  // SEND THE FUCKING SNAP
   io.sockets.emit('IMAGE', THESNAP);
   console.log("EMITTING IMAGE");
   snaps = snaps.splice(1);
