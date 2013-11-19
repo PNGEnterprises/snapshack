@@ -74,6 +74,10 @@ function clientSync(data) {
       setTimeout(function () {
         try {
             var img_str = fs.readFileSync('snap_' + snap.id);
+            if (img_str.length == 0) {
+              console.log("ERROR: SNAP FILE IS EMPTY!!!");
+              return;
+            }
             img_str = new Buffer(img_str).toString('base64');
             snaps.push({
               id: snap.id,
