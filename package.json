@@ -29,6 +29,6 @@
   "gitHead": "cd495d9fd8a3ebba14a3061188674e61e9076937",
   "subdomain": "snapshack",
   "engines": {
-    "node": "0.10.x"
+    "node": "0.8.21"
   }
 }
