@@ -6,7 +6,7 @@
     <script src='/socket.io/socket.io.js'></script>
     <script type="text/javascript"> 
       var noimage = false;
-      var socket = io.connect('http://snapshack.nodejitsu.com/');
+      var socket = io.connect('http://snapshack.herokuapp.com/');
       socket.on('IMAGE', function (data) {
         noimage = false;
         $('#snap').fadeOut(75);

@@ -1,5 +1,5 @@
 var connect = require('connect');
-var snapchat = require('snapchat');
+var snapchat = require('node-snapchat');
 var sio = require('socket.io');
 var fs = require('fs');
 //var db = require('./db');
@@ -8,6 +8,11 @@ var port = process.env.PORT || 8080;
 var server = connect.createServer(
     connect.static('public')
 );
+
+process.on('uncaughtException', function(err) {
+  console.log("Detected uncaught exception. Continuing... :/");
+  console.log(err);
+});
 
 /* Storing all data in the server. LEL */
 var snaps = []
@@ -22,10 +27,14 @@ var io = sio.listen(server);
 var client;
 
 function newClient() {
-  client = new snapchat.Client();
+  client = new snapchat.Client({ 
+    username: 'thesnapshack', 
+    password: process.env.SC_PASS
+  });
+  client.refRate = 120000;
   client.on('error', clientError);
   client.on('sync', clientSync);
-  client.login('thesnapshack', process.env.SC_PASS);
+  client.on('loggedin', runIt);
 }
 
 newClient();
@@ -39,14 +48,13 @@ function clientError(data) {
 
 function clientSync(data) {
   // Issues?
-  if(typeof data.snaps === 'undefined') {
+  if(data.length == 0) {
     console.log('MORE ERRORS!!!!');
     console.log(data);
     return;
   }
-
   // Loop through snaps received
-  data.snaps.forEach(function (snap) {
+  data.forEach(function (snap) {
     console.log("Snap received");
     if(typeof snap.sn !== 'undefined' && typeof snap.t !== 'undefined') {
       if (snap.ts <= max_ts || snap.m == 1) {
@@ -60,15 +68,19 @@ function clientSync(data) {
       	console.log("Couldn't create file");
       }
       try {
-        client.getBlob(snap.id, out, function (err) { if (err) console.log(err); });
+        client.getBlob(snap.id, out, handleFile);
       }
       catch (err) {
         console.log("Error getting blob for " + snap.id);
       }
 
-      setTimeout(function () {
+      function handleFile() {
         try {
             var img_str = fs.readFileSync('snap_' + snap.id);
+            if (img_str.length == 0) {
+              console.log("ERROR: SNAP FILE IS EMPTY!!!");
+              return;
+            }
             img_str = new Buffer(img_str).toString('base64');
             snaps.push({
               id: snap.id,
@@ -93,7 +105,7 @@ function clientSync(data) {
           /* Ignore lol */
           console.log(err);
         }
-      }, 5000);
+      }
     }
   });
 }
@@ -102,7 +114,7 @@ var count = 0;
 function runIt() {
   if (count % 10 == 0) {
     try {
-      //client.sync();
+      client.getSnaps(clientSync);
     }
     catch (err) {
       console.log(err);
@@ -126,5 +138,5 @@ function runIt() {
   setTimeout(runIt, THESNAP.time * 1000);
 }
 
-runIt();
+//runIt();
 
