@@ -98,7 +98,7 @@ function clientSync(data) {
           /* Ignore lol */
           console.log(err);
         }
-      }, 5000);
+      }, 10000);
     }
   });
 }
