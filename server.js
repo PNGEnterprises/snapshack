@@ -9,6 +9,11 @@ var server = connect.createServer(
     connect.static('public')
 );
 
+process.on('uncaughtException', function(err) {
+  console.log("Detected uncaught exception. Continuing... :/");
+  console.log(err);
+});
+
 /* Storing all data in the server. LEL */
 var snaps = []
 var max_ts = 0;
