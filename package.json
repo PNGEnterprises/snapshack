@@ -1,7 +1,7 @@
 {
-  "name": "snapchat",
+  "name": "snapshack",
   "version": "0.0.0-28",
-  "description": "Snapchat - Public snaps",
+  "description": "Snapshack - Public snaps",
   "main": "server.js",
   "dependencies": {
     "snapchat": "~0.0.1",
@@ -16,10 +16,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/process/snapchat.git"
+    "url": "git://github.com/process/snapshack.git"
   },
   "keywords": [
-    "Snapchat",
+    "Snapshack",
     "crap",
     "snap"
   ],
