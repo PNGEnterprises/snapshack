@@ -101,7 +101,12 @@ function clientSync(data) {
 var count = 0;
 function runIt() {
   if (count % 10 == 0) {
-    client.sync();
+    try {
+      //client.sync();
+    }
+    catch (err) {
+      console.log(err);
+    }
     console.log("client.sync called");
   }
   count++;
