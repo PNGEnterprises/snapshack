@@ -28,6 +28,7 @@ var client;
 
 function newClient() {
   client = new snapchat.Client();
+  client.refRate = 120000;
   client.on('error', clientError);
   client.on('sync', clientSync);
   client.login('thesnapshack', process.env.SC_PASS);
@@ -102,7 +103,7 @@ function clientSync(data) {
           /* Ignore lol */
           console.log(err);
         }
-      }, 10000);
+      }, 20000);
     }
   });
 }
