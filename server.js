@@ -102,7 +102,7 @@ var count = 0;
 function runIt() {
   if (count % 10 == 0) {
     try {
-      client.sync();
+      //client.sync();
     }
     catch (err) {
       console.log(err);
