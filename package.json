@@ -6,7 +6,7 @@
   "dependencies": {
     "connect": "^2.9.2",
     "firebase": "^0.6.22",
-    "node-snapchat": "git+http://github.com/process/node-snapchat.git",
+    "node-snapchat": "process/node-snapchat",
     "socket.io": "^0.9.16"
   },
   "devDependencies": {},
