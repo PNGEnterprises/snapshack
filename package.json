@@ -4,10 +4,10 @@
   "description": "Snapshack - Public snaps",
   "main": "server.js",
   "dependencies": {
-    "connect": "~2.9.0",
-    "firebase": "~0.6.3",
-    "socket.io": "~0.9.16",
-    "node-snapchat": "git+http://github.com/process/node-snapchat.git"
+    "connect": "^2.9.2",
+    "firebase": "^0.6.22",
+    "node-snapchat": "git+http://github.com/process/node-snapchat.git",
+    "socket.io": "^0.9.16"
   },
   "devDependencies": {},
   "scripts": {
