@@ -130,9 +130,6 @@ function runIt() {
 
     return;
   }
-  var THESNAP = snaps[0];
-  io.sockets.emit('IMAGE', THESNAP);
-  console.log("EMITTING IMAGE");
   var THESNAP = snaps[(count-1)%snaps.length];
   io.sockets.emit('IMAGE', THESNAP);
   console.log("EMITTING IMAGE");
