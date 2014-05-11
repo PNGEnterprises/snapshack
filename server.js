@@ -133,7 +133,10 @@ function runIt() {
   var THESNAP = snaps[0];
   io.sockets.emit('IMAGE', THESNAP);
   console.log("EMITTING IMAGE");
-  snaps = snaps.splice(1);
+  var THESNAP = snaps[(count-1)%snaps.length];
+  io.sockets.emit('IMAGE', THESNAP);
+  console.log("EMITTING IMAGE");
+  //snaps = snaps.splice(1);
 
   setTimeout(runIt, THESNAP.time * 1000);
 }
