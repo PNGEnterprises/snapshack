@@ -9,6 +9,12 @@ var server = connect.createServer(
     connect.static('public')
 );
 
+// If a password hasn't been set. Exit.
+if (!process.env.SC_PASS) {
+  console.log("No password specified. Exiting. Set SC_PASS.");
+  process.exit(1);
+}
+
 process.on('uncaughtException', function(err) {
   console.log("Detected uncaught exception. Continuing... :/");
   console.log(err);
