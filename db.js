@@ -1,6 +1,9 @@
 var firebase = require('firebase');
 var db = new firebase('https://snapshack.firebaseio.com/');
 
+/* Note: this code is unsused for the time being. 
+ * Firebase isn't playing nice with our image data
+ */
 module.exports.addSnap = function (id, uname, image_b64, duration, timestamp) {
   console.log("hi");
   var snap = db.child('/snaps/' + id);
@@ -15,5 +18,5 @@ module.exports.addSnap = function (id, uname, image_b64, duration, timestamp) {
       else
         console.log("Added " + id);
     });
-  console.log("derp");
+  console.log("Snap added to firebase");
 };

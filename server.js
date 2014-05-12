@@ -1,11 +1,11 @@
-var connect = require('connect');
-var snapchat = require('node-snapchat');
-var sio = require('socket.io');
-var fs = require('fs');
+var connect = require('connect')
+  , snapchat = require('node-snapchat')
+  , sio = require('socket.io')
+  , fs = require('fs');
 //var db = require('./db');
 
-var port = process.env.PORT || 8080;
-var server = connect.createServer(
+var port = process.env.PORT || 8080
+  , server = connect.createServer(
     connect.static('public')
 );
 
@@ -15,22 +15,21 @@ if (!process.env.SC_PASS) {
   process.exit(1);
 }
 
+// XXX This should definitely be removed
 process.on('uncaughtException', function(err) {
   console.log("Detected uncaught exception. Continuing... :/");
   console.log(err);
 });
 
-/* Storing all data in the server. LEL */
-var snaps = []
-var max_ts = 0;
+/* Storing data in this array */
+var snaps = [] // We should come up with a better data structure or something
+  , max_ts = 0
+  , client; // The snapchat client
 
 server = server.listen(port, function () {
     console.log("Listening on port " + port);
 });
 var io = sio.listen(server);
-
-// Snapchat client
-var client;
 
 function newClient() {
   client = new snapchat.Client({ 
@@ -47,16 +46,18 @@ newClient();
 
 // Log errors
 function clientError(data) {
-  console.log('ERROR!!!!');
+  // Note: Errors seems to occur after we've been logged in
+  // for a long time
+  console.log('An error occurred in the snapchat client');
+  console.log('The data from the error is:');
   console.log(data);
-  newClient(); // RESET IT
+  newClient(); // Recreate the client, since after an error it may not work
 }
 
 function clientSync(data) {
-  // Issues?
+  // If we have no data, something has probably gone wrong, so return
   if(data.length == 0) {
-    console.log('MORE ERRORS!!!!');
-    console.log(data);
+    console.log('An error occured syncing with snapchat');
     return;
   }
   // Loop through snaps received
@@ -84,7 +85,7 @@ function clientSync(data) {
         try {
             var img_str = fs.readFileSync('snap_' + snap.id);
             if (img_str.length == 0) {
-              console.log("ERROR: SNAP FILE IS EMPTY!!!");
+              console.log("Error: The snap file was empty");
               return;
             }
             img_str = new Buffer(img_str).toString('base64');
@@ -96,6 +97,7 @@ function clientSync(data) {
               ts: snap.ts
             });
 
+            // Sort snaps by their timestamps
             snaps.sort(function (a,b) {return a.ts - b.ts;});
 
             console.log("Snap added!");
@@ -108,7 +110,7 @@ function clientSync(data) {
             //console.log("after delete");
         }
         catch (err) {
-          /* Ignore lol */
+          /* XXX Ignore it for now */
           console.log(err);
         }
       }
@@ -132,16 +134,17 @@ function runIt() {
   if (snaps.length == 0) {
     io.sockets.emit('NOIMAGE');
     setTimeout(runIt, 1000);
-    console.log("EMITTING NO IMAGE");
+    console.log('Emitting "NOIMAGE"');
 
     return;
   }
-  var THESNAP = snaps[(count-1)%snaps.length];
-  io.sockets.emit('IMAGE', THESNAP);
-  console.log("EMITTING IMAGE");
+  var theSnap = snaps[(count-1)%snaps.length];
+  io.sockets.emit('IMAGE', theSnap);
+  console.log('Emitting "IMAGE"');
   //snaps = snaps.splice(1);
 
-  setTimeout(runIt, THESNAP.time * 1000);
+  // Wait for the needed time before getting the nex snap
+  setTimeout(runIt, theSnap.time * 1000);
 }
 
 //runIt();
