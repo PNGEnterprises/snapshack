@@ -6,7 +6,7 @@
     <script src='/socket.io/socket.io.js'></script>
     <script type="text/javascript"> 
       var noimage = false;
-      var socket = io.connect('http://snapshack.herokuapp.com/');
+      var socket = io.connect('/');
       socket.on('IMAGE', function (data) {
         noimage = false;
         $('#snap').fadeOut(75);
@@ -15,7 +15,7 @@
       	// username
       	// duration
       	// timestamp
-      	console.log("image message shit");
+      	console.log("Image received");
       });
       socket.on('NOIMAGE', function() {
         if (!noimage) {
@@ -24,7 +24,7 @@
           $('#snap').fadeIn(75);
         }
         noimage = true;
-      	console.log("fuck");
+      	console.log("No images available");
       });
     </script>
   </head>
@@ -36,7 +36,8 @@
       </div>
       <div id='messagesDiv' style="float:right; width: 400px; height: 800px;">
         <p style="text-align:center;"><i>Made at HackMIT, October 2013</i><br />by<br />
-        <i><a href="http://twitter.com/justinderbox">@justinderbox</a> / <a href="http://twitter.com/tcalvert93">@tcalvert93</a> / <a href="mailto:npmanor@wpi.edu">Nolan Manor</a> / <a href="http://twitter.com/The_Iron_Shrek">@The_Iron_Shrek</a></i></p>
+        <i><a href="http://twitter.com/justinchines">@justinchines</a> / <a href="http://twitter.com/tcalvert93">@tcalvert93</a> / <a href="ma`ilto:npmanor@wpi.edu">Nolan Manor</a> / <a href="http://twitter.com/JCrispies">@JCrispies</a></i></p>
+	<p style="text-align:center;font-size:small;"><i>Send your snapchats to 'thesnapshack' for them to appear here!</i></p><br />
         <b style="font-size:16pt;">Chat</b><br />
         <input type='text' id='nameInput' placeholder='Name'>
         <input type='text' id='messageInput' placeholder='Message'>
